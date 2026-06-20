@@ -13,9 +13,9 @@
 #   1. Detecta OS (linux/darwin) y arquitectura (x86_64/arm64).
 #   2. Resuelve la última release vía GitHub API.
 #   3. Descarga el .tar.gz que matchea.
-#   4. Extrae issw a ~/.local/bin/issw (crea el dir si hace falta).
+#   4. Extrae isw a ~/.local/bin/isw (crea el dir si hace falta).
 #   5. Hint al usuario si ~/.local/bin no está en PATH.
-#   6. Verifica `issw version`.
+#   6. Verifica `isw version`.
 
 set -euo pipefail
 
@@ -23,8 +23,8 @@ set -euo pipefail
 # Repo PÚBLICO de releases. El código fuente está en otro repo
 # privado, fuera del alcance de este script.
 REPO="TP202610017/framework-llm-releases"
-BINARY="issw"
-INSTALL_DIR="${ISSW_INSTALL_DIR:-$HOME/.local/bin}"
+BINARY="isw"
+INSTALL_DIR="${ISW_INSTALL_DIR:-$HOME/.local/bin}"
 
 # ── Pretty output ────────────────────────────────────────────────────
 c_blue=$'\033[36m'; c_green=$'\033[32m'; c_yellow=$'\033[33m'
@@ -58,7 +58,7 @@ done
 
 # ── 3. Resolve latest release ────────────────────────────────────────
 step "Fetching latest release info"
-LATEST_JSON="$(curl -fsSL -H "User-Agent: issw-installer" \
+LATEST_JSON="$(curl -fsSL -H "User-Agent: isw-installer" \
                 "https://api.github.com/repos/${REPO}/releases/latest")" \
   || die "Could not reach GitHub API"
 
@@ -81,11 +81,11 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 step "Downloading"
-curl -fsSL "$ASSET_URL" -o "$TMP/issw.tar.gz"
+curl -fsSL "$ASSET_URL" -o "$TMP/isw.tar.gz"
 
 step "Extracting to $INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
-tar -xzf "$TMP/issw.tar.gz" -C "$TMP"
+tar -xzf "$TMP/isw.tar.gz" -C "$TMP"
 EXTRACTED="$(find "$TMP" -type f -name "$BINARY" -perm -u+x | head -1 \
               || find "$TMP" -type f -name "$BINARY" | head -1)"
 [ -n "$EXTRACTED" ] || die "Could not find binary '$BINARY' inside the archive"
@@ -112,10 +112,10 @@ esac
 
 # ── 7. Verify ────────────────────────────────────────────────────────
 step "Verifying installation"
-"$INSTALL_DIR/$BINARY" version || warn "Installed, but \`issw version\` failed"
+"$INSTALL_DIR/$BINARY" version || warn "Installed, but \`isw version\` failed"
 
 cat <<EOF
 
-${c_green}✦ Done.${c_reset} Run ${c_blue}issw${c_reset} (or open a new shell first).
+${c_green}✦ Done.${c_reset} Run ${c_blue}isw${c_reset} (or open a new shell first).
 
 EOF

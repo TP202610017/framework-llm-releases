@@ -327,9 +327,9 @@ CLI flags  >  environment variables  >  isw.yaml  >  built-in defaults
 | Variable              | Description                                             |
 |-----------------------|---------------------------------------------------------|
 | `ANTHROPIC_API_KEY`   | API key for the Claude provider (default key env)       |
-| `ISSW_LLM_PROVIDER`   | LLM provider: `claude`, `openai`, `gemini`, or `mock`   |
-| `ISSW_LLM_MODEL`      | Model name override                                     |
-| `ISSW_LLM_API_KEY_ENV`| Name of the env var that holds the API key              |
+| `ISW_LLM_PROVIDER`   | LLM provider: `claude`, `openai`, `gemini`, or `mock`   |
+| `ISW_LLM_MODEL`      | Model name override                                     |
+| `ISW_LLM_API_KEY_ENV`| Name of the env var that holds the API key              |
 
 ### Config file (`isw.yaml`)
 

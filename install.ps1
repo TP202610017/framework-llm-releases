@@ -12,9 +12,9 @@
 #   1. Detecta arquitectura de CPU (amd64 / arm64).
 #   2. Resuelve la última release vía GitHub API.
 #   3. Descarga el .zip que matchea con tu OS+arch.
-#   4. Extrae issw.exe a %LOCALAPPDATA%\Programs\issw\.
+#   4. Extrae isw.exe a %LOCALAPPDATA%\Programs\isw\.
 #   5. Agrega esa carpeta al User PATH (idempotente).
-#   6. Verifica `issw version`.
+#   6. Verifica `isw version`.
 
 $ErrorActionPreference = "Stop"
 
@@ -22,8 +22,8 @@ $ErrorActionPreference = "Stop"
 # Repo PÚBLICO de releases. El código fuente está en otro repo
 # privado, fuera del alcance de este script.
 $Repo       = "TP202610017/framework-llm-releases"
-$BinaryName = "issw.exe"
-$InstallDir = Join-Path $env:LOCALAPPDATA "Programs\issw"
+$BinaryName = "isw.exe"
+$InstallDir = Join-Path $env:LOCALAPPDATA "Programs\isw"
 
 # ─── Helpers ─────────────────────────────────────────────────────────
 function Write-Step($msg)    { Write-Host "▶  $msg" -ForegroundColor Cyan }
@@ -47,7 +47,7 @@ Write-Ok "arch=$Arch"
 Write-Step "Fetching latest release info"
 try {
     $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest" `
-                                 -Headers @{ "User-Agent" = "issw-installer" }
+                                 -Headers @{ "User-Agent" = "isw-installer" }
 }
 catch {
     Die "Could not reach GitHub API: $_"
@@ -56,7 +56,7 @@ $Version = $release.tag_name
 Write-Ok "latest=$Version"
 
 # ─── 3. Find the right asset ─────────────────────────────────────────
-$AssetName = "issw-framework-llm_${Version}_windows_${Arch}.zip" -replace "^v", ""
+$AssetName = "isw-framework-llm_${Version}_windows_${Arch}.zip" -replace "^v", ""
 $Asset = $release.assets | Where-Object { $_.name -like "*windows*$Arch*" -and $_.name -like "*.zip" } | Select-Object -First 1
 
 if (-not $Asset) {
@@ -101,14 +101,14 @@ else {
 Write-Step "Verifying installation"
 try {
     $verOut = & (Join-Path $InstallDir $BinaryName) version 2>&1
-    Write-Ok "issw is installed:"
+    Write-Ok "isw is installed:"
     Write-Host $verOut -ForegroundColor Gray
 }
 catch {
-    Write-WarnLine "Installed, but `issw version` failed: $_"
+    Write-WarnLine "Installed, but `isw version` failed: $_"
 }
 
 Write-Host ""
 Write-Host "✦ Done. Open a new terminal and run:" -ForegroundColor Magenta
-Write-Host "    issw" -ForegroundColor White
+Write-Host "    isw" -ForegroundColor White
 Write-Host ""
