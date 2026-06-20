@@ -61,13 +61,24 @@ computational cost of their codebases**. It works in two layers:
 
 ### Windows
 
+**Easiest — double-click.** Download **`install.bat`** from the
+[latest release](https://github.com/TP202610017/framework-llm-releases/releases/latest)
+and double-click it. No command line, no PowerShell knowledge needed.
+
+**PowerShell:**
 ```powershell
 irm https://github.com/TP202610017/framework-llm-releases/releases/latest/download/install.ps1 | iex
 ```
 
-The installer detects your CPU architecture, downloads the matching binary,
-places it at `%LOCALAPPDATA%\Programs\isw\isw.exe`, and adds it to your
-user `PATH` automatically.
+**Command Prompt (CMD):** `irm` is a PowerShell command, so from CMD run it
+through `powershell`:
+```bat
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://github.com/TP202610017/framework-llm-releases/releases/latest/download/install.ps1 | iex"
+```
+
+All three install to `%LOCALAPPDATA%\Programs\isw\isw.exe` and add it to your
+**user** `PATH` — **no administrator rights needed**. Open a new terminal
+afterwards and run `isw`.
 
 ### macOS / Linux
 
