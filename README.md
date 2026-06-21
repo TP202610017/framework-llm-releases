@@ -61,6 +61,13 @@ computational cost of their codebases**. It works in two layers:
 
 ### Windows
 
+**winget (Windows Package Manager)** — once published, the cleanest install.
+`winget` verifies the download hash and adds `isw` to your `PATH` automatically:
+```powershell
+winget install isw
+```
+> Or by full id: `winget install TP202610017.ISW`.
+
 **Easiest — double-click.** Download **`install.bat`** from the
 [latest release](https://github.com/TP202610017/framework-llm-releases/releases/latest)
 and double-click it. No command line, no PowerShell knowledge needed.
