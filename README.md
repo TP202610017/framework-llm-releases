@@ -26,6 +26,7 @@
 
 - [What is `isw`?](#what-is-isw)
 - [Install](#install)
+- [Uninstall](#uninstall)
 - [Quick start](#quick-start)
 - [How it works](#how-it-works)
 - [Commands](#commands)
@@ -103,6 +104,63 @@ Download the archive for your platform from the
 extract `isw` (`isw.exe` on Windows), make it executable (`chmod +x isw` on Unix),
 and move it anywhere on your `PATH`. Verify your download against the included
 `checksums.txt` (SHA-256).
+
+---
+
+## Uninstall
+
+### winget
+
+If you installed with winget:
+
+```powershell
+winget uninstall isw
+# or by full id:
+winget uninstall TP202610017.isw
+```
+
+### Windows (install.ps1 / install.bat / manual)
+
+The installer places the binary in `%LOCALAPPDATA%\Programs\isw` and adds that
+folder to your **User** `PATH`. To remove both:
+
+```powershell
+# 1. Delete the binary
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\isw"
+
+# 2. Remove the folder from your User PATH
+$dir   = "$env:LOCALAPPDATA\Programs\isw"
+$path  = [Environment]::GetEnvironmentVariable('Path', 'User')
+$clean = ($path -split ';' | Where-Object { $_ -and $_ -ne $dir }) -join ';'
+[Environment]::SetEnvironmentVariable('Path', $clean, 'User')
+```
+
+Open a new terminal for the `PATH` change to take effect.
+
+### macOS / Linux
+
+```bash
+rm -f ~/.local/bin/isw
+```
+
+If you added `export PATH="$HOME/.local/bin:$PATH"` to your shell rc just for
+`isw`, you can delete that line too (it is harmless to leave).
+
+### Remove leftover project state (optional)
+
+`isw` never writes to a global location — it only touches a project when you use
+`--apply` / `--backup`, and those files sit next to your code. To clear them, run
+this **inside a project** where you used `isw`:
+
+```bash
+rm -rf .isw-framework        # backups / state
+rm -f  isw.yaml              # local config, if you created one
+```
+
+```powershell
+Remove-Item -Recurse -Force .\.isw-framework -ErrorAction SilentlyContinue
+Remove-Item -Force .\isw.yaml -ErrorAction SilentlyContinue
+```
 
 ---
 
