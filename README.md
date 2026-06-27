@@ -135,7 +135,7 @@ Remove-Item -Recurse -Force $dir
 
 # 3. Remove the folder from your User PATH
 $path  = [Environment]::GetEnvironmentVariable('Path', 'User')
-$clean = ($path -split ';' | Where-Object { $_ -and $_ -ne $dir }) -join ';'
+$clean = ((($path -split ';') -ne $dir) -ne '') -join ';'
 [Environment]::SetEnvironmentVariable('Path', $clean, 'User')
 ```
 
