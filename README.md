@@ -125,17 +125,26 @@ The installer places the binary in `%LOCALAPPDATA%\Programs\isw` and adds that
 folder to your **User** `PATH`. To remove both:
 
 ```powershell
-# 1. Delete the binary
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\isw"
+# 1. Close isw if it is running — the .exe is locked while in use
+Get-Process isw -ErrorAction SilentlyContinue | Stop-Process -Force
 
-# 2. Remove the folder from your User PATH
-$dir   = "$env:LOCALAPPDATA\Programs\isw"
+# 2. Delete the binary (clear read-only attributes first)
+$dir = "$env:LOCALAPPDATA\Programs\isw"
+attrib -r "$dir\*" /s 2>$null
+Remove-Item -Recurse -Force $dir
+
+# 3. Remove the folder from your User PATH
 $path  = [Environment]::GetEnvironmentVariable('Path', 'User')
 $clean = ($path -split ';' | Where-Object { $_ -and $_ -ne $dir }) -join ';'
 [Environment]::SetEnvironmentVariable('Path', $clean, 'User')
 ```
 
 Open a new terminal for the `PATH` change to take effect.
+
+> **Still getting *Access denied*?** The file is locked. Close every terminal
+> running `isw` and retry, or run PowerShell **as Administrator**. If an older
+> build was flagged by Microsoft Defender, it may be locked/quarantined — remove
+> it from **Windows Security → Virus & threat protection → Protection history**.
 
 ### macOS / Linux
 
