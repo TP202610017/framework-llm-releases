@@ -97,6 +97,27 @@ curl -fsSL https://github.com/TP202610017/framework-llm-releases/releases/latest
 The binary is placed at `~/.local/bin/isw`. If that directory is not yet on
 your `PATH`, the installer prints the one-line `export` to add to your shell rc.
 
+### Offline install (no internet)
+
+Download the archive for your platform from the
+[latest release](https://github.com/TP202610017/framework-llm-releases/releases/latest)
+on a machine with internet, copy it (plus `install.ps1` / `install.sh`) to the
+target machine, then:
+
+```powershell
+.\install.ps1 -LocalPackage C:\path\to\isw_<version>_windows_x86_64.zip
+```
+
+```bash
+bash install.sh --local /path/to/isw_<version>_linux_x86_64.tar.gz
+```
+
+If an online install cannot reach GitHub, the installers print these steps
+instead of a bare network error.
+
+**Minimum requirements** — checked by the installers before anything is
+written: Windows 10 + Windows PowerShell 5.1, macOS 10.15, Linux kernel 2.6.32.
+
 ### Manual install
 
 Download the archive for your platform from the
@@ -271,6 +292,13 @@ SCORE   CEE-kWh          LINES  PATH
 3.9/10  0.000000025 kWh  368    codemod/c_scan.go
 3.8/10  0.000000038 kWh  552    lang_validator.go
 3.6/10  0.000000019 kWh  282    treesitter/cpp_walk.go
+```
+
+Show only some severities (`critical`, `moderate`, `low`) — works for the
+dashboard and for `-o json` / `yaml` / `csv`, where every row carries `severity`:
+
+```bash
+isw hotspots -p . --severity critical
 ```
 
 > Test files (`*_test.go`, `test_*.py`, `*.test.ts`, `*Test.java`, …) are
